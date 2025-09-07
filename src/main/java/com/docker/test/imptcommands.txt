@@ -1,0 +1,18 @@
+1. to confirm project is running in docker container using jdk 21
+docker exec -it springboot-java21 java -version
+Or docker exec -it container-name java -version  //docker-test-app-1
+like,   docker exec -it docker-test-app-1 java -version
+
+2.Docker use karna ho to aapko IntelliJ terminal ke andar local Maven commands chalane ki zaroorat nahi.
+  Instead, ye commands run karo:
+
+  docker compose build --no-cache
+  docker compose up
+
+3. to run docker project if using docker compose file.
+docker-compose up -d
+
+4. to stop docker project if using docker compose file.
+docker-compose down
+
+
