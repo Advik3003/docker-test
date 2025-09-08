@@ -15,4 +15,78 @@ docker-compose up -d
 4. to stop docker project if using docker compose file.
 docker-compose down
 
+=============Kubernetes==================
+kubectl apply -f k8s/
+Check pods:  kubectl get pods
+Check services: kubectl get svc
 
+//
+kubectl apply → deploy
+kubectl get pods → check pod status
+kubectl get svc → check service & port
+kubectl logs <pod> → check console output
+Access app → http://localhost:8080
+
+//To run script
+Save script in project root: run-springboot.sh
+Give execute permission:
+chmod +x run-springboot.sh
+Run:
+./run-springboot.sh
+
+//To clean up
+Run cleanup:
+chmod +x cleanup.sh
+./cleanup.sh
+
+
+//
+kubectl delete all --all
+
+//
+1. Kubernetes Dashboard (Official)
+What it is: The official web UI for Kubernetes.
+Features: View pods, services, deployments, logs, and even create/update resources.
+Install:
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml
+Then start proxy:
+kubectl proxy
+
+//how to stop and remove kubernetes dashboard
+1. Check if Dashboard is installed
+Run:
+kubectl get all -n kubernetes-dashboard
+
+👉 This will show you all pods, services, deployments related to the dashboard.
+🔹 2. Remove Kubernetes Dashboard
+If you installed it using the official YAML (recommended.yaml), you can delete it with:
+kubectl delete -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml
+This removes all Dashboard components.
+
+🔹 3. Verify Removal
+Check again:
+kubectl get all -n kubernetes-dashboard
+You should see no resources found.
+
+🔹 4. Extra Cleanup (Optional)
+If you created a service account/token manually for logging into Dashboard, you can also clean it up:
+kubectl delete clusterrolebinding kubernetes-dashboard
+kubectl delete clusterrole kubernetes-dashboard
+kubectl delete sa kubernetes-dashboard -n kubernetes-dashboard
+
+//To stop and delete project from kubernetes
+Option 1: Temporarily Stop (but keep YAMLs for future)
+If you just want to pause the project:
+Scale down deployments to 0
+kubectl scale deployment springboot-app --replicas=0
+kubectl scale deployment mysql --replicas=0
+👉 This will stop pods, but services & deployments remain.
+👉 Later, you can start again:
+
+kubectl scale deployment springboot-app --replicas=1
+kubectl scale deployment mysql --replicas=1
+
+Option 2: Permanent Delete
+kubectl delete -f k8s/
+To double-check:
+kubectl get all
